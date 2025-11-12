@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: products_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: products
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  products-service:
+    build: .
+    container_name: products_service
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8081:8081"
+      - "5005:5005"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/products
+      DB_USER: postgres
+      DB_PASS: postgres
+      PRODUCTS_API_KEY: dev-products-key
