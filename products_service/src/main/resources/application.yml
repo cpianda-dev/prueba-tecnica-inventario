@@ -1,0 +1,33 @@
+server:
+  port: 8081
+  tomcat:
+    basedir: ${TOMCAT_BASEDIR:./.tomcat}
+spring:
+  application:
+    name: products-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/products}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+springdoc:
+  default-produces-media-type: application/vnd.api+json
+  default-consumes-media-type: application/vnd.api+json
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    operationsSorter: alpha
+    tagsSorter: alpha

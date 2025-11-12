@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS products (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(120) NOT NULL UNIQUE,
+  price NUMERIC(12,2) NOT NULL CHECK (price > 0),
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);

@@ -1,10 +1,13 @@
 HELP.md
-.gradle
+!gradle/wrapper/gradle-wrapper.jar
+!products_service/gradle/wrapper/gradle-wrapper.jar
+!/gradlew
+!/gradlew.bat
+.gradle/
 build/
 target/
 out/
 bin/
-!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -37,10 +40,10 @@ bin/
 
 ### NetBeans ###
 /nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+.nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 
 ### VS Code ###
 .vscode/
