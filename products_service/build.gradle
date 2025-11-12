@@ -44,27 +44,49 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
-    implementation 'org.apache.commons:commons-lang3:3.21.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+jacoco {
+    toolVersion = "0.8.12"
 }
 
-jacocoTestReport {
-	dependsOn test
-	reports { xml.required = true; html.required = true }
+def jacocoExcludes = [
+        '**/ProductsApplication.*',
+        '**/config/OpenApiConfig.*',
+        '**/infrastructure/persistence/entity/**',
+        '**/*MapperImpl.*',
+        '**/infrastructure/mapper/**',
+]
+
+def mainOutputDirs = [
+        "$buildDir/classes/java/main",
+        "$buildDir/generated/sources/annotationProcessor/java/main"
+]
+
+tasks.named('jacocoTestReport') {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    classDirectories.setFrom(files(
+            mainOutputDirs.collect { dir -> fileTree(dir: dir, exclude: jacocoExcludes) }
+    ))
 }
 
-jacocoTestCoverageVerification {
+tasks.named('jacocoTestCoverageVerification') {
+    classDirectories.setFrom(files(
+            mainOutputDirs.collect { dir -> fileTree(dir: dir, exclude: jacocoExcludes) }
+    ))
     violationRules {
         rule {
             limit {
                 counter = 'LINE'
-                value = 'COVEREDRATIO'
+                value   = 'COVEREDRATIO'
                 minimum = 0.80
             }
         }

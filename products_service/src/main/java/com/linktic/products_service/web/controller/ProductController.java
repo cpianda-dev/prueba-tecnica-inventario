@@ -92,7 +92,7 @@ public class ProductController {
         links.setSelf("/products/paginated?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
         links.setFirst("/products/paginated?pageNumber=1&pageSize=" + page.getSize());
         links.setLast("/products/paginated?pageNumber=" + Math.max(page.getTotalPages(),1) + "&pageSize=" + page.getSize());
-        if (page.hasNext()) links.setNext("/products?pageNumber=" + (pageNumber + 1) + "&pageSize=" + page.getSize());
+        if (page.hasNext()) links.setNext("//paginated?pageNumber=" + (pageNumber + 1) + "&pageSize=" + page.getSize());
         if (page.hasPrevious()) links.setPrev("/products/paginated?pageNumber=" + (pageNumber - 1) + "&pageSize=" + page.getSize());
         body.setLinks(links);
 
