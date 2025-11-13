@@ -101,6 +101,34 @@ flowchart LR
 
 - Logback JSON + Actuator: logs estructurados listos para ELK y health checks estándar.
 
+### ¿Por qué PostgreSQL (relacional)?
+
+Se eligió PostgreSQL porque, para este ejercicio, encaja bien con un dominio sencillo y relacional (productos e inventario):
+
+- Consistencia y transacciones: operaciones como purchase necesitan actualizar stock sin valores negativos; PostgreSQL ofrece transacciones ACID y manejo de concurrencia (MVCC) que resultan prácticos en este escenario.
+
+- Modelo y consultas conocidas: SQL facilita listados, paginación e índices sin añadir complejidad.
+
+- Integración y operativa: buena compatibilidad con Spring Data JPA y Flyway; despliegue simple con Docker.
+
+- Flexibilidad moderada: además de tablas relacionales, dispone de JSONB para datos semiestructurados si llega a ser necesario.
+
+- Escalado razonable: soporta réplicas e incluso particionado si el sistema creciera.
+
+Trade-offs
+
+- Cada microservicio usa su propia base de datos (sin FKs cruzadas); la validación entre dominios se hace vía API. Reduce acoplamiento, a costa de una llamada extra y coordinación de cambios.
+
+- Cambios de esquema implican migraciones (Flyway) que conviene coordinar.
+
+Alternativas
+
+- MySQL/MariaDB: alternativas válidas y similares para este caso.
+
+- MongoDB/documentales: suelen encajar mejor si el esquema cambia con mucha frecuencia o prima el modelo por agregados; aquí priorizamos transacciones simples.
+
+- Event Sourcing: útil para auditoría detallada, probablemente fuera de alcance para esta prueba.
+
 ---
 
 ## Cómo ejecutar todo con un único `docker-compose` (raíz)
